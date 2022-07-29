@@ -72,8 +72,6 @@ public abstract class Menu {
 
         this.clearMenu(inventory);
 
-        this.tick();
-
         final Button[] fillerButtons = this.getFillerButtons();
 
         for (int i = 0; i < fillerButtons.length; i++) {
@@ -82,6 +80,8 @@ public abstract class Menu {
             }
         }
 
+        this.tick();
+        
         for(int index = 0; index < buttons.length; index++) {
             if (buttons[index] != null) {
                 inventory.setItem(index, buttons[index].toItemStack());

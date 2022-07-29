@@ -3,6 +3,8 @@ package io.github.nosequel.menu.pagination;
 import io.github.nosequel.menu.buttons.Button;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 
 @RequiredArgsConstructor
 @Getter
@@ -19,15 +21,22 @@ public enum NavigationPosition {
         public Button[] getNavigationButtons(PaginatedMenu menu) {
             final Button[] buttons = new Button[9];
 
-            buttons[0] = menu.getPreviousPageButton().setClickAction(event -> {
-                menu.navigatePrevious();
-                event.setCancelled(true);
-            });
+            boolean previous = menu.getPage() != 1;
+            buttons[0] = new Button(Material.ARROW)
+                    .setDisplayName(previous ? ChatColor.GREEN + "Previous Page" : ChatColor.RED + "This is the first page")
+                    .setClickAction(event -> {
+                        if (previous) menu.navigatePrevious();
+                        event.setCancelled(true);
+                    });
 
-            buttons[8] = menu.getNextPageButton().setClickAction(event -> {
-                menu.navigateNext();
-                event.setCancelled(true);
-            });
+
+            boolean next = menu.usedButtons() > ((menu.getSize() - 27) - (((menu.getSize() - 27)/9) * 2)) * menu.getPage();
+            buttons[8] = new Button(Material.ARROW)
+                    .setDisplayName(next ? ChatColor.GREEN + "Next Page" : ChatColor.RED + "This is the last page")
+                    .setClickAction(event -> {
+                        if(next) menu.navigateNext();
+                        event.setCancelled(true);
+                    });
 
             return buttons;
         }

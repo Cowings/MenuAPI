@@ -10,6 +10,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import java.util.*;
+
 @Getter
 @Setter
 public abstract class PaginatedMenu extends Menu {
@@ -24,6 +26,7 @@ public abstract class PaginatedMenu extends Menu {
 
     private int page = 1;
     private int maxPages;
+    private Map<Button, Integer> addedNavButtons = new HashMap<>();
 
     /**
      * Constructor to make a new menu object
@@ -109,12 +112,12 @@ public abstract class PaginatedMenu extends Menu {
         final Button[] buttons = new Button[this.getSize()];
 
         for (FillingType filler : this.getFillers()) {
-            final Button[] fillers = filler.fillMenu(this);
+            final Button[] fillers = filler.fillMenu(PaginatedMenu.this);
 
             for (int i = 0; i < fillers.length; i++) {
                 if (fillers[i] != null) {
                     for (int page = 0; page < this.maxPages; page++) {
-                        this.buttons[(page * this.getSize()) + i] = fillers[i];
+                        this.buttons[(page * (this.getSize() - 9)) + i] = fillers[i];
                     }
                 }
             }
@@ -142,6 +145,24 @@ public abstract class PaginatedMenu extends Menu {
      * @return the list of buttons
      */
     public Button[] getNavigationBar() {
-        return this.navigationPosition.getNavigationButtons(this).clone();
+        Button[] navButtons = this.navigationPosition.getNavigationButtons(this).clone();
+        for (Button button : addedNavButtons.keySet()) {
+            navButtons[addedNavButtons.get(button)] = button;
+        }
+
+        return navButtons;
+    }
+
+    public int usedButtons() {
+        int count = 0;
+        for (Button button : buttons) {
+            if (button != null && !button.getDisplayName().equals(" ")) count++;
+        }
+
+        return count;
+    }
+
+    public void addNavigationButton(Button button, int position) {
+        this.addedNavButtons.put(button, position);
     }
 }

@@ -2,6 +2,7 @@ package io.github.nosequel.menu.filling;
 
 import io.github.nosequel.menu.Menu;
 import io.github.nosequel.menu.buttons.Button;
+import io.github.nosequel.menu.pagination.PaginatedMenu;
 
 public enum FillingType {
 
@@ -15,10 +16,14 @@ public enum FillingType {
          */
         @Override
         public Button[] fillMenu(Menu menu) {
-            final Button[] buttons = new Button[menu.getSize()];
+            boolean paginated = menu instanceof PaginatedMenu;
+            int newSize = paginated ? menu.getSize() - 9 : menu.getSize();
 
-            for (int i = 0; i < menu.getSize(); i++) {
-                if (i < 9 || i >= menu.getSize() - 9 || i % 9 == 0 || i % 9 == 8) {
+            final Button[] buttons = new Button[newSize];
+
+            for (int i = 0; i < newSize; i++) { // for each page
+                    //top    //bottom            // side 1     //side 2
+                if (i < 9 || i >= newSize - 9 || i % 9 == 0 || i % 9 == 8) { // for borders
                     buttons[i] = new Button(menu.getFillerType().getType())
                             .setData(menu.getFillerType().getData().getData())
                             .setDisplayName(" ")
