@@ -56,16 +56,14 @@ public enum NavigationPosition {
             final int size = menu.getSize();
             final int page = menu.getPage();
 
-            final int maxElements = size - 9;
-
-            final int start = ((page - 1) * maxElements);
-            final int end = (start + maxElements) - 1;
+            final int start = ((page - 1) * size);
+            final int end = (start + size) - 1;
 
             for (int index = 0; index < buttons.length; index++) {
                 final Button button = buttons[index];
 
                 if (button != null && index >= start && index <= end) {
-                    returningButtons[index - ((maxElements) * (page - 1)) + 9] = button;
+                    returningButtons[index - ((size) * (page - 1))] = button;
                 }
             }
 

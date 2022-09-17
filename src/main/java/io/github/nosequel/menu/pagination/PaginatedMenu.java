@@ -117,7 +117,7 @@ public abstract class PaginatedMenu extends Menu {
             for (int i = 0; i < fillers.length; i++) {
                 if (fillers[i] != null) {
                     for (int page = 0; page < this.maxPages; page++) {
-                        this.buttons[(page * (this.getSize() - 9)) + i] = fillers[i];
+                        this.buttons[((page * (this.getSize() - 9)) + i) + (9 * (page + 1))] = fillers[i];
                     }
                 }
             }
